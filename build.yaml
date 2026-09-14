@@ -1,10 +1,10 @@
 include:
   # TOTEM (Seeed XIAO BLE) — layout: config/totem.keymap
-  - board: seeeduino_xiao_ble
+  - board: xiao_ble//zmk
     shield: totem_left
-  - board: seeeduino_xiao_ble
+  - board: xiao_ble//zmk
     shield: totem_right
-  - board: seeeduino_xiao_ble
+  - board: xiao_ble//zmk
     shield: settings_reset
 
   # Corne (nice!nano v2) — layout: config/corne.keymap
