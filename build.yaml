@@ -1,7 +1,18 @@
 include:
+  # TOTEM (Seeed XIAO BLE) — layout: config/totem.keymap
   - board: xiao_ble//zmk
     shield: totem_left
   - board: xiao_ble//zmk
     shield: totem_right
   - board: xiao_ble//zmk
+    shield: settings_reset
+
+  # Corne (nice!nano v2) — layout: config/corne.keymap
+  # The central half carries the USB RPC transport for ZMK Studio.
+  - board: nice_nano//zmk
+    shield: corne_left
+    snippet: studio-rpc-usb-uart
+  - board: nice_nano//zmk
+    shield: corne_right
+  - board: nice_nano//zmk
     shield: settings_reset

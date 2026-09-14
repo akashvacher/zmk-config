@@ -1,0 +1,33 @@
+/*
+ * Corne (42 key, nice!nano v2) — thin shim.
+ *
+ * The TOTEM layout is a strict subset of the Corne: both are
+ * "5 alpha columns + 6-key bottom row + 3 thumbs per half". The Corne adds
+ * four keys — the pinky-outer column's top and middle key on each half
+ * (matrix positions 0, 12, 11, 23). They are left dead (&none) on every
+ * layer so that the two keyboards behave identically.
+ *
+ * To put something on those keys later, replace the XXX placeholders below,
+ * e.g.  &trans LT  -> or a per-key binding. Note they are shared by all
+ * layers (one arrangement for every layer in base.keymap).
+ *
+ * All layout content lives in config/base.keymap.
+ */
+
+#include "zmk-helpers/key-labels/42.h"
+
+#define XXX &none
+
+/* Corne arrangement: 6 columns on rows 0 and 1 (the outer pinky-outer key
+ * comes first on the left half / last on the right half), 6 columns on the
+ * bottom row, 3 thumbs per half. Must stay in matrix-transform order. */
+#define ZMK_BASE_LAYER(id, name, LT, RT, LM, RM, LB, RB, LH, RH)               \
+    LAYER(                                                                     \
+        id, name,                                                              \
+        XXX LT           RT XXX                                                \
+        XXX LM           RM XXX                                                \
+        LB RB                                                                  \
+        LH RH                                                                  \
+    )
+
+#include "base.keymap"

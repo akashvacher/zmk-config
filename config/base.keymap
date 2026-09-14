@@ -1,0 +1,131 @@
+/*
+ * Shared layout — used by every keyboard in this repo.
+ *
+ *   TOTEM  (38 key, Seeed XIAO BLE)  ->  config/totem.keymap
+ *   Corne  (42 key, nice!nano v2)    ->  config/corne.keymap
+ *
+ * All layout content (layers, homerow mods, combos) lives here. A keyboard
+ * keymap only supplies its physical arrangement by defining ZMK_BASE_LAYER()
+ * and including its zmk-helpers key-labels header before this file.
+ *
+ * The default ZMK_BASE_LAYER below is the TOTEM arrangement:
+ * 5 alpha columns + 6-key bottom row + 3 thumbs per half (38 keys).
+ *
+ * Alphas: Colemak-DH. Layers: BASE 0, NAV 1, SYM 2, ADJ 3.
+ * Hold the left thumb for NAV/TAB, the right thumb for SYM/ESC.
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+
+#include <zmk-helpers/helper.h>
+
+#define BASE 0
+#define NAV  1
+#define SYM  2
+#define ADJ  3
+
+/* ── Timeless homerow mods ──
+ * https://github.com/urob/zmk-config#timeless-homerow-mods
+ * KEYS_L / KEYS_R / THUMBS come from the keyboard's key-labels header.
+ */
+
+/* left-hand HRMs */
+ZMK_HOLD_TAP(hml,
+    flavor = "balanced";
+    tapping-term-ms = <400>;
+    quick-tap-ms = <175>;
+    require-prior-idle-ms = <150>;
+    bindings = <&kp>, <&kp>;
+    hold-trigger-key-positions = <KEYS_R THUMBS>;
+    hold-trigger-on-release;
+)
+
+/* right-hand HRMs */
+ZMK_HOLD_TAP(hmr,
+    flavor = "balanced";
+    tapping-term-ms = <400>;
+    quick-tap-ms = <175>;
+    require-prior-idle-ms = <150>;
+    bindings = <&kp>, <&kp>;
+    hold-trigger-key-positions = <KEYS_L THUMBS>;
+    hold-trigger-on-release;
+)
+
+/* ── Combos (identical physical gestures on every keyboard) ── */
+#include "combos.dtsi"
+
+/* ── Physical arrangement ──
+ * id: layer number (BASE/NAV/SYM/ADJ), name: what the display shows,
+ * LT/RT: top row, LM/RM: home row, LB/RB: bottom row, LH/RH: thumbs.
+ * Keyboards with more keys than the default override ZMK_BASE_LAYER.
+ *
+ * zmk-helpers' ZMK_LAYER() stringifies its argument, which would turn the
+ * layer macros (BASE = 0, ...) into display names "0", "2", "3". This macro
+ * keeps the node name and the display name readable instead.
+ */
+#define LAYER(_id, _name, _layout)                                             \
+    / {                                                                        \
+        keymap {                                                               \
+            compatible = "zmk,keymap";                                         \
+            layer_ ## _id {                                                    \
+                display-name = _name;                                          \
+                bindings = <_layout>;                                          \
+            };                                                                 \
+        };                                                                     \
+    };
+
+#ifndef ZMK_BASE_LAYER
+  #define ZMK_BASE_LAYER(id, name, LT, RT, LM, RM, LB, RB, LH, RH) \
+      LAYER(id, name, LT RT LM RM LB RB LH RH)
+#endif
+
+ZMK_BASE_LAYER(BASE, "BASE",
+// ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+    &kp Q         &kp W        &kp F         &kp P         &kp B         ,   &kp J         &kp L         &kp U         &kp Y         &kp SEMI      ,
+// ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    &hml LGUI A   &hml LALT R  &hml LCTRL S  &hml LSHFT T  &kp G         ,   &kp M         &hmr RSHFT N  &hmr RCTRL E  &hmr RALT I   &hmr RGUI O   ,
+// ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    &kp Q         &kp Z        &kp X         &kp C         &kp D         &kp V   ,   &kp K   &kp H         &kp COMMA     &kp DOT       &kp FSLH      &kp BSLH ,
+// ╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
+                                                          &kp DEL       &lt NAV TAB   &kp SPACE   ,   &kp RET       &lt SYM ESC    &kp BSPC
+//                                                        ╰─────────────┴─────────────┴─────────────╯ ╰─────────────┴─────────────┴─────────────╯
+)
+
+ZMK_BASE_LAYER(NAV, "NAVI",
+// ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+    &kp ESC       &bt BT_CLR   &kp UP        &kp EQUAL     &kp LBRC      ,   &kp RBRC      &kp KP_N7     &kp KP_N8     &kp KP_N9     &kp KP_PLUS   ,
+// ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    &kp LSHFT     &kp LEFT     &kp DOWN      &kp RIGHT     &kp LBKT      ,   &kp RBKT      &kp KP_N4     &kp KP_N5     &kp KP_N6     &kp KP_MINUS  ,
+// ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    &trans        &kp DEL      &kp PG_UP     &kp CAPS      &kp PG_DN     &kp LPAR  ,   &kp RPAR  &kp KP_N1     &kp KP_N2     &kp KP_N3     &kp KP_MULTIPLY &trans ,
+// ╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
+                                                          &trans        &trans        &trans      ,   &mo ADJ       &kp KP_N0     &trans
+//                                                        ╰─────────────┴─────────────┴─────────────╯ ╰─────────────┴─────────────┴─────────────╯
+)
+
+ZMK_BASE_LAYER(SYM, "SYM",
+// ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+    &kp EXCL      &kp AT       &kp HASH      &kp DLLR      &kp PRCNT     ,   &kp CARET     &kp AMPS      &kp RA(U)     &kp SQT       &kp DQT       ,
+// ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    &kp RA(A)     &trans       &kp RA(S)     &trans        &trans        ,   &kp C_MUTE    &kp LS(RA(N4)) &kp RA(N5)   &kp RA(N4)    &kp RA(O)     ,
+// ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    &trans        &kp RA(F18)  &kp RA(F19)   &trans        &trans        &trans    ,   &kp C_VOL_DN &kp C_VOL_UP &kp C_PREV &kp C_NEXT  &kp BSLH      &trans ,
+// ╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
+                                                          &trans        &trans        &mo ADJ     ,   &trans        &kp C_PP      &trans
+//                                                        ╰─────────────┴─────────────┴─────────────╯ ╰─────────────┴─────────────┴─────────────╯
+)
+
+ZMK_BASE_LAYER(ADJ, "ADJ",
+// ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+    &sys_reset    &bt BT_CLR   &out OUT_TOG  &trans        &trans        ,   &trans        &kp F7        &kp F8        &kp F9        &kp F12       ,
+// ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    &bootloader   &bt BT_NXT   &trans        &trans        &trans        ,   &trans        &kp F4        &kp F5        &kp F6        &kp F11       ,
+// ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+    &trans        &trans       &bt BT_PRV    &trans        &trans        &trans    ,   &trans    &kp F1        &kp F2        &kp F3        &kp F10       &trans ,
+// ╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
+                                                          &trans        &trans        &trans      ,   &trans        &trans        &trans
+//                                                        ╰─────────────┴─────────────┴─────────────╯ ╰─────────────┴─────────────┴─────────────╯
+)

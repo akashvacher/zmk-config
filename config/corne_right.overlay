@@ -1,0 +1,7 @@
+/* Upstream corne shield defines led_strip for nice!nano with a placeholder
+ * chain length (10). Override it with the real count: 27 = 6 underglow + 21 per-key.
+ * This file is applied after the shield overlays, so it wins.
+ */
+&led_strip {
+    chain-length = <27>;
+};

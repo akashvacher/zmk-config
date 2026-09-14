@@ -1,0 +1,35 @@
+/*
+ * Shared combos — included by base.keymap, so every keyboard gets the same
+ * gestures. Positions are written with zmk-helpers key labels (LT3 = ring
+ * top, RM1 = index home row, LB1 = bottom row index/outer, ...), which name
+ * the same physical key on every keyboard.
+ *
+ * Gesture origins: Saurav's Corne config. Positions are kept identical to
+ * his, so these are the same physical pairs.
+ *
+ * Timings: 30 ms / 150 ms prior-idle for adjacent pairs,
+ *          40 ms / 100 ms prior-idle for the vertical symbol combos.
+ * 1 arg: name, 2: binding, 3: positions, 4: layers, 5: timeout, 6: idle.
+ */
+
+/* ── Adjacent pairs ── */
+
+ZMK_COMBO(caps_word, &caps_word,   LM1 RM1, BASE, 30, 150)  /* index home row          */
+ZMK_COMBO(esc,       &kp ESC,      LT3 LT2, BASE, 30, 150)  /* ring + middle, top row  */
+ZMK_COMBO(bspc,      &kp BSPC,     RT2 RT3, BASE, 30, 150)  /* middle + ring, top row  */
+ZMK_COMBO(del,       &kp DEL,      RT3 RT4, BASE, 30, 150)  /* ring + pinky, top row   */
+ZMK_COMBO(tab,       &kp TAB,      LM3 LM2, BASE, 30, 150)  /* ring + middle, home row */
+ZMK_COMBO(enter,     &kp RET,      RM3 RM2, BASE, 30, 150)  /* ring + middle, home row */
+ZMK_COMBO(semi,      &kp SEMI,     RM3 RM4, BASE, 30, 150)  /* ring + pinky, home row  */
+
+/* Clipboard: bottom row, middle + index/outer keys */
+ZMK_COMBO(copy,      &kp LG(C),    LB2 LB3, BASE, 30, 150)
+ZMK_COMBO(paste,     &kp LG(V),    LB1 LB2, BASE, 30, 150)
+ZMK_COMBO(cut,       &kp LG(X),    LB1 LB3, BASE, 30, 150)
+
+/* ── Vertical symbol combos (same finger, two rows) ── */
+
+ZMK_COMBO(minus,     &kp MINUS,    RM1 RB1, BASE, 40, 100)  /* right index/outer */
+ZMK_COMBO(under,     &kp UNDER,    RM0 RB0, BASE, 40, 100)  /* right index/inner */
+ZMK_COMBO(equal,     &kp EQUAL,    LM1 LB1, BASE, 40, 100)  /* left  index/outer */
+ZMK_COMBO(grave,     &kp GRAVE,    LM3 LB3, BASE, 40, 100)  /* left  ring        */
